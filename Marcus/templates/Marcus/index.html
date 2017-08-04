@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Remote Cameras</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/JavaScript">
+    $(document).ready(function() {
+        $("#add_camera_link").click(function() {
+          $("#add_camera").toggle();
+        });
+        $("#new_camera_btn").click(function() {
+          var newCameraIdentifier = $("#new_camera_name").val();
+          var newCameraIP = $("#new_camera_uuid").val();
+          var data = {"newCameraIdentifier":newCameraIdentifier,
+                      "newCameraUuid":newCameraIP,
+                      "action":"newCamera"};
+          $.post("/json-api/",JSON.stringify(data),function(data,status,jqKXR) {
+            console.log(data);
+          });
+        });
+        $("#remove_camera_link").click(function(){
+          $("#remove_camera").toggle();
+        });
+    });
+    </script>
+    <style type="text/css">
+      #add_camera { display: none; width:340px; padding: 5px; }
+      #add_camera_name { padding: 3px; }
+      #add_camera_ip { padding: 3px; }
+      #new_camera_button { padding: 3px; }
+      #remove_camera { display: none; }
+    </style>
+  </head>
+  <body>
+  {% if camera_list %}
+    <ul>
+    {% for each_camera in camera_list %}
+      <li><a href="/camera/{{ each_camera.id }}/">{{ each_camera.name }}</a>
+      <div><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
+      <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div></li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <h1>No cameras available.</h1>
+  {% endif %}
+  <ul>
+    <li>
+      <a id="add_camera_link" href="#">Add Camera</a>
+      <div id="add_camera">
+        <div id="add_camera_name"><input id="new_camera_name" size="55" placeholder="Camera Description" /></div>
+        <div id="add_camera_uuid"><input id="new_camera_uuid" size="55" placeholder="Camera UUID" /></div>
+        <div id="new_camera_button" align="right"><button id="new_camera_btn">New Camera</button></div>
+      </div>
+    </li>
+    <li>
+      <a id="remove_camera_link" href="#">Remove Camera</a>
+      <div id="remove_camera">
+        {% if camera_list %}
+          <select>
+          {% for each_camera in camera_list %}
+            <option value="{{ each_camera.id }}">{{ each_camera.name }}</option>
+          {% endfor %}
+        </select>
+        <div id="remove_camera_button" align="right"><button size="55" id="remove_camera_btn">Remove Camera</a></div>
+        {% else %}
+          <p>No cameras available.</p>
+        {% endif %}
+      </div>
+    </li>
+  </ul>
+  </body>
+</html>
