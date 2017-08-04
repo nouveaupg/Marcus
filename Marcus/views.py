@@ -38,7 +38,7 @@ def upload(request):
             k = Key(bucket)
             k.key = bucket_key
             try:
-                k.set_contents_as_string(request.FILES['jpeg-upload'])
+                k.set_contents_as_string(request.FILES['jpeg_upload'])
             except e:
                 print str(e)
             k.set_acl('public-read')
