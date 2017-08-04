@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
+from django.shortcuts import render
 from .models import RemoteCamera, Frame
-from .forms import UploadImageForm
+from .forms import UploadFileForm
 from django.views.decorators.csrf import csrf_exempt
 
 from boto.s3.connection import S3Connection
@@ -25,7 +26,7 @@ def index(request):
 @csrf_exempt
 def upload(request):
     if request.method == "POST":
-        form = UploadImageForm(request.POST,request.FILES)
+        form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
             s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY)
             bucket = s3.get_bucket("littlemarco")
@@ -38,16 +39,13 @@ def upload(request):
                 print str(e)
             k.set_acl('public-read')
 
-            return HttpResponse("https://s3.amazonaws.com/littlemarco/" + bucket_key
-        else:
-            return HttpResponse("{\"success\":false,\"error\":\"Invalid upload method form.\"}")
+            return HttpResponseRedirect("https://s3.amazonaws.com/littlemarco/" + bucket_key)
         #
         #s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY);
         #if s3:
         #    s3.get_bucket("uuid")
-
-
-    return HttpResponse("{\"success\":false,\"error\":\"Invalid HTTP method only POST allowed.\"}")
+    form = UploadFileForm()
+    return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
 
 @csrf_exempt
 def json_api(request):
@@ -55,7 +53,7 @@ def json_api(request):
     if 'action' in json_data_in:
         if json_data_in['action'] == "newCamera":
             new_camera = RemoteCamera.objects.create(name=json_data_in['newCameraIdentifier'],
-                                                    ip_addr=json_data_in['newCameraIP'])
+                                                    uuid=json_data_in['newCameraIP'])
             new_camera.save()
             return HttpResponse(str(json_data_in))
     return HttpResponse("{\"succuss\":false}")
