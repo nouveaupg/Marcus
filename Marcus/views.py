@@ -26,7 +26,15 @@ def index(request):
 def upload(request):
     if request == "POST":
         form = UploadImageForm(request.POST,request.FILES)
-        return HttpResponse(str(request.FILES['jpeg']))
+        s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY)
+        bucket = s3.get_bucket("littlemarco")
+        bucket_key = str(uuid.uuid4()) + ".jpg"
+        k = Key(bucket)
+        k.key = bucket_key
+        k.set_contents_as_string(request.FILES['jpeg'])
+        k.set_acl('public-read')
+
+        return HttpResponse("https://s3.amazonaws.com/littlemarco/bucket_key"
         #
         #s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY);
         #if s3:
