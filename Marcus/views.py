@@ -26,18 +26,21 @@ def index(request):
 def upload(request):
     if request.method == "POST":
         form = UploadImageForm(request.POST,request.FILES)
-        s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY)
-        bucket = s3.get_bucket("littlemarco")
-        bucket_key = str(uuid.uuid4()) + ".jpg"
-        k = Key(bucket)
-        k.key = bucket_key
-        try:
-            k.set_contents_as_string(request.FILES['jpeg'])
-        except e:
-            print str(e)
-        k.set_acl('public-read')
+        if form.is_valid():
+            s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY)
+            bucket = s3.get_bucket("littlemarco")
+            bucket_key = str(uuid.uuid4()) + ".jpg"
+            k = Key(bucket)
+            k.key = bucket_key
+            try:
+                k.set_contents_as_string(request.FILES['jpeg'])
+            except e:
+                print str(e)
+            k.set_acl('public-read')
 
-        return HttpResponse("https://s3.amazonaws.com/littlemarco/" + bucket_key
+            return HttpResponse("https://s3.amazonaws.com/littlemarco/" + bucket_key
+        else:
+            return HttpResponse("{\"success\":false,\"error\":\"Invalid upload method form.\"}")
         #
         #s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY);
         #if s3:
