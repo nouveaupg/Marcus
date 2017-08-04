@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 from .models import RemoteCamera, Frame
-from .forms import Form
+from django import forms
 from django.views.decorators.csrf import csrf_exempt
 
 from boto.s3.connection import S3Connection
@@ -12,7 +12,7 @@ import random
 import json
 import uuid
 
-class UploadFileForm(Form):
+class UploadFileForm(forms.Form):
     camerea_uuid = forms.CharField(36)
     file = forms.FileField()
 
