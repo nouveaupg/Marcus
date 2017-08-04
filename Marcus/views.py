@@ -38,7 +38,7 @@ def upload(request):
             k = Key(bucket)
             k.key = bucket_key
             try:
-                k.set_contents_as_string(request.FILES['jpeg'])
+                k.set_contents_as_string(request.FILES['jpeg-upload'])
             except e:
                 print str(e)
             k.set_acl('public-read')
@@ -48,8 +48,9 @@ def upload(request):
         #s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY);
         #if s3:
         #    s3.get_bucket("uuid")
-    form = UploadFileForm()
-    return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
+    else:
+        form = UploadFileForm()
+        return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
 
 @csrf_exempt
 def json_api(request):
