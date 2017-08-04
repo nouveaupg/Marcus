@@ -31,7 +31,10 @@ def upload(request):
         bucket_key = str(uuid.uuid4()) + ".jpg"
         k = Key(bucket)
         k.key = bucket_key
-        k.set_contents_as_string(request.FILES['jpeg'])
+        try:
+            k.set_contents_as_string(request.FILES['jpeg'])
+        except e:
+            print str(e)
         k.set_acl('public-read')
 
         return HttpResponse("https://s3.amazonaws.com/littlemarco/" + bucket_key
