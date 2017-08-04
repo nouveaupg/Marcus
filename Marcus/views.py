@@ -34,7 +34,7 @@ def upload(request):
         k.set_contents_as_string(request.FILES['jpeg'])
         k.set_acl('public-read')
 
-        return HttpResponse("https://s3.amazonaws.com/littlemarco/bucket_key"
+        return HttpResponse("https://s3.amazonaws.com/littlemarco/" + bucket_key
         #
         #s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY);
         #if s3:
