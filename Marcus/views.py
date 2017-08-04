@@ -40,7 +40,7 @@ def upload(request):
             try:
                 k.set_contents_as_string(request.FILES['jpeg_upload'].read())
             except e:
-                print str(e)
+                return HttpResponse("{\"succuss\":false,\"exception\":\"%s\"}" % e)
             k.set_acl('public-read')
 
             return HttpResponseRedirect("https://s3.amazonaws.com/littlemarco/" + bucket_key)
