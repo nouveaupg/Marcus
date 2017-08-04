@@ -24,7 +24,7 @@ def index(request):
 
 @csrf_exempt
 def upload(request):
-    if request == "POST":
+    if request.method == "POST":
         form = UploadImageForm(request.POST,request.FILES)
         s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY)
         bucket = s3.get_bucket("littlemarco")
