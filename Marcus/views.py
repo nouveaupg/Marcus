@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 from .models import RemoteCamera, Frame
-from .forms import UploadFileForm
+from .forms import Form
 from django.views.decorators.csrf import csrf_exempt
 
 from boto.s3.connection import S3Connection
@@ -11,6 +11,10 @@ from boto.s3.key import Key
 import random
 import json
 import uuid
+
+class UploadFileForm(Form):
+    camerea_uuid = forms.CharField(36)
+    file = forms.FileField()
 
 AWS_ACCESS_KEY="AKIAIPRAN234JWT4WHSQ"
 AWS_ACCESS_SECRET_KEY="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"
