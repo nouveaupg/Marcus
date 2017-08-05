@@ -9,9 +9,9 @@
         });
         $("#new_camera_btn").click(function() {
           var newCameraIdentifier = $("#new_camera_name").val();
-          var newCameraIP = $("#new_camera_uuid").val();
+          var newCameraUuid = $("#new_camera_uuid").val();
           var data = {"newCameraIdentifier":newCameraIdentifier,
-                      "newCameraUuid":newCameraIP,
+                      "newCameraUuid":newCameraUuid,
                       "action":"newCamera"};
           $.post("/json-api/",JSON.stringify(data),function(data,status,jqKXR) {
             console.log(data);

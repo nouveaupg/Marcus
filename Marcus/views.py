@@ -13,11 +13,8 @@ import json
 import uuid
 
 class UploadFileForm(forms.Form):
-    camerea_uuid = forms.CharField(36)
-    file = forms.FileField()
-
-AWS_ACCESS_KEY="AKIAIPRAN234JWT4WHSQ"
-AWS_ACCESS_SECRET_KEY="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"
+    camera_uuid = forms.CharField(36)
+    frame = forms.FileField()
 
 def index(request):
     camera_list = RemoteCamera.objects.all()
@@ -31,26 +28,21 @@ def index(request):
 def upload(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST,request.FILES)
-        if form.is_valid():
-            s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY)
-            bucket = s3.get_bucket("littlemarco")
-            bucket_key = str(uuid.uuid4()) + ".jpg"
-            k = Key(bucket)
-            k.key = bucket_key
-            try:
-                k.set_contents_as_string(request.FILES['jpeg_upload'].read())
-            except e:
-                return HttpResponse("{\"succuss\":false,\"exception\":\"%s\"}" % e)
-            k.set_acl('public-read')
+        s3 = boto.connect_s3()
+        bucket = s3.get_bucket(uuid.uuid4())
+        bucket_key = str(uuid.uuid4()) + ".jpg"
+        k = Key(bucket)
+        k.key = bucket_key
+        try:
+            k.set_contents_as_string(request.FILES['jpeg_upload'].read())
+        except e:
+            return HttpResponse("{\"succuss\":false,\"exception\":\"%s\"}" % str(e))
+        k.set_acl('public-read')
 
-            return HttpResponseRedirect("https://s3.amazonaws.com/littlemarco/" + bucket_key)
-        #
-        #s3 = S3Connection(AWS_ACCESS_KEY,AWS_ACCESS_SECRET_KEY);
-        #if s3:
-        #    s3.get_bucket("uuid")
+        return HttpResponseRedirect("https://s3.amazonaws.com/" + bucket + "/" + bucket_key)
     else:
         form = UploadFileForm()
-        return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
+    return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
 
 @csrf_exempt
 def json_api(request):
@@ -58,7 +50,7 @@ def json_api(request):
     if 'action' in json_data_in:
         if json_data_in['action'] == "newCamera":
             new_camera = RemoteCamera.objects.create(name=json_data_in['newCameraIdentifier'],
-                                                    uuid=json_data_in['newCameraIP'])
+                                                    uuid=json_data_in['newCameraUuid'])
             new_camera.save()
             return HttpResponse(str(json_data_in))
     return HttpResponse("{\"succuss\":false}")
