@@ -36,7 +36,7 @@ def upload(request):
         try:
             k.set_contents_as_string(request.FILES['jpeg_upload'].read())
         except e:
-            return HttpResponse("{\"succuss\":false,\"exception\":\"%s\"}" % str(e))
+            return HttpResponse("{\"success\":false,\"exception\":\"%s\"}" % str(e))
         k.set_acl('public-read')
 
         return HttpResponseRedirect("https://s3.amazonaws.com/" + bucket + "/" + bucket_key)
@@ -53,4 +53,4 @@ def json_api(request):
                                                     uuid=json_data_in['newCameraUuid'])
             new_camera.save()
             return HttpResponse(str(json_data_in))
-    return HttpResponse("{\"succuss\":false}")
+    return HttpResponse("{\"success\":false}")
