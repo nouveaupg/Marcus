@@ -25,6 +25,12 @@ def index(request):
 def upload(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST,request.FILES)
+        if form.is_valid():
+            if "camera_uuid" in request.POST:
+                uuid = request.POST['camera_uuid']
+                camera = RemoteCamera.objects.get(camera_uuid=uuid)
+                if camera:
+                    return HttpResponse("{\"success\":True}")
     else:
         form = UploadFileForm()
     return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
