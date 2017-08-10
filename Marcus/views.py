@@ -5,9 +5,6 @@ from .models import RemoteCamera, Frame
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
 
-from boto.s3.connection import S3Connection
-from boto.s3.key import Key
-
 import random
 import json
 import uuid
@@ -28,18 +25,6 @@ def index(request):
 def upload(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST,request.FILES)
-        s3 = boto.connect_s3()
-        bucket = s3.get_bucket(uuid.uuid4())
-        bucket_key = str(uuid.uuid4()) + ".jpg"
-        k = Key(bucket)
-        k.key = bucket_key
-        try:
-            k.set_contents_as_string(request.FILES['jpeg_upload'].read())
-        except e:
-            return HttpResponse("{\"success\":false,\"exception\":\"%s\"}" % str(e))
-        k.set_acl('public-read')
-
-        return HttpResponseRedirect("https://s3.amazonaws.com/" + bucket + "/" + bucket_key)
     else:
         form = UploadFileForm()
     return HttpResponse(render(request,"Marcus/upload_image.html",{"form":form}))
