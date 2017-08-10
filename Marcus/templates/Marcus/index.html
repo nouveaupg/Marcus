@@ -7,6 +7,7 @@
         $("#add_camera_link").click(function() {
           $("#add_camera").toggle();
         });
+        /*
         $("#new_camera_btn").click(function() {
           var newCameraIdentifier = $("#new_camera_name").val();
           var newCameraUuid = $("#new_camera_uuid").val();
@@ -16,7 +17,7 @@
           $.post("/json-api/",JSON.stringify(data),function(data,status,jqKXR) {
             console.log(data);
           });
-        });
+        });*/
         $("#remove_camera_link").click(function(){
           $("#remove_camera").toggle();
         });
@@ -45,26 +46,26 @@
   <ul>
     <li>
       <a id="add_camera_link" href="#">Add Camera</a>
-      <div id="add_camera">
-        <div id="add_camera_name"><input id="new_camera_name" size="55" placeholder="Camera Description" /></div>
-        <div id="add_camera_uuid"><input id="new_camera_uuid" size="55" placeholder="Camera UUID" /></div>
-        <div id="new_camera_button" align="right"><button id="new_camera_btn">New Camera</button></div>
-      </div>
+      <form id="add_camera">
+        <div id="add_camera_name"><input name="new_camera_name" size="55" placeholder="Camera Description" /></div>
+        <div id="add_camera_uuid"><input name="new_camera_uuid" size="55" placeholder="Camera UUID" /></div>
+        <div id="new_camera_button" align="right"><input type="submit" id="new_camera_btn" /></div>
+      </form>
     </li>
     <li>
       <a id="remove_camera_link" href="#">Remove Camera</a>
-      <div id="remove_camera">
+      <form id="remove_camera">
         {% if camera_list %}
           <select>
           {% for each_camera in camera_list %}
             <option value="{{ each_camera.id }}">{{ each_camera.name }}</option>
           {% endfor %}
         </select>
-        <div id="remove_camera_button" align="right"><button size="55" id="remove_camera_btn">Remove Camera</a></div>
+        <input type="submit" size="55" id="remove_camera_btn" />
         {% else %}
           <p>No cameras available.</p>
         {% endif %}
-      </div>
+      </form>
     </li>
   </ul>
   </body>
