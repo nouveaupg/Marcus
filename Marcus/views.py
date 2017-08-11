@@ -17,9 +17,10 @@ class UploadFileForm(forms.Form):
 
 def index(request):
     if request.method == "POST":
-        new_camera = RemoteCamera.objects.create(name=new_camera_name,
+        if "new_camera_uuid" in method.POST:
+            new_camera = RemoteCamera.objects.create(name=new_camera_name,
                                                 uuid=new_camera_uuid)
-        new_camera.save()
+            new_camera.save()                
     camera_list = RemoteCamera.objects.all()
     template = loader.get_template('Marcus/index.html')
     context = {
