@@ -29,6 +29,7 @@
       #add_camera_uuid { padding: 3px; }
       #new_camera_button { padding: 3px; }
       #remove_camera { display: none; }
+      .camera_still {width: 640;height: 480; background-color: #cdcdcdcd;}
     </style>
   </head>
   <body>
@@ -36,6 +37,7 @@
     <ul>
     {% for each_camera in camera_list %}
       <li><a href="/camera/{{ each_camera.id }}/">{{ each_camera.name }}</a>
+      <div class="camera_still"><img width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
       <div><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
       <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div></li>
     {% endfor %}
@@ -54,7 +56,7 @@
     </li>
     <li>
       <a id="remove_camera_link" href="#">Remove Camera</a>
-      <form id="remove_camera">
+      <form id="remove_camera" method="post">
         {% if camera_list %}
           <select name="remove_camera_id">
           {% for each_camera in camera_list %}

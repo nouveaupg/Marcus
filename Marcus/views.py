@@ -10,23 +10,49 @@ BASE_IMAGE_DIR = "./"
 
 import json
 import uuid
+import re
 
 class UploadFileForm(forms.Form):
     camera_uuid = forms.CharField(36)
     frame = forms.FileField()
 
+@csrf_exempt
 def index(request):
     if request.method == "POST":
-        if "new_camera_uuid" in method.POST:
+        if "new_camera_uuid" in request.POST:
+            new_camera_uuid = request.POST['new_camera_uuid']
+            new_camera_name = request.POST['new_camera_name']
             new_camera = RemoteCamera.objects.create(name=new_camera_name,
                                                 uuid=new_camera_uuid)
-            new_camera.save()                
+            new_camera.save()
+        if "remove_camera_id" in request.POST:
+            value = int(request.POST['remove_camera_id'])
+            try:
+                camera_to_remove = RemoteCamera.objects.get(id=value)
+                camera_to_remove.delete()
+            except:
+                raise
     camera_list = RemoteCamera.objects.all()
     template = loader.get_template('Marcus/index.html')
     context = {
     "camera_list": camera_list
     }
     return HttpResponse(template.render(context, request))
+
+@csrf_exempt
+def latest_still(request):
+    path_string = str(request.path)
+    camera_number = int(path_string.split("/")[2])
+    try:
+        camera = RemoteCamera.objects.get(id=camera_number)
+        camera_stills = Frame.objects.filter(owner=camera)
+        latest_still = camera_stills.latest("timestamp")
+        f = file(str(latest_still.url),"r")
+        jpeg_data = f.read()
+        return HttpResponse(jpeg_data,content_type="image/jpeg")
+    except:
+        raise
+    return HttpResponse("Not found.")
 
 @csrf_exempt
 def upload(request):
@@ -40,7 +66,10 @@ def upload(request):
                 with open(BASE_IMAGE_DIR + new_frame_url, 'wb+') as destination:
                     for chunk in request.FILES['jpeg_upload'].chunks():
                         destination.write(chunk)
+                request_ip_addr = request.META['REMOTE_ADDR']
                 new_frame = Frame.objects.create(owner=camera,url=new_frame_url)
+                camera.ip_addr = request_ip_addr
+                camera.save()
                 return HttpResponse("{\"success\":true,\"url\":" + new_frame_url + "}")
             except ObjectDoesNotExist:
                 return HttpResponse("{\"success\":false,\"error\":\"Unregistered camera UUID\"}")

@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
     url(r'^json-api/$',views.json_api),
-    url(r'^upload/$',views.upload)
+    url(r'^upload/$',views.upload),
+    url(r'^camera/[0-9]{1,2}/latest_still.jpg$',views.latest_still)
 ]
