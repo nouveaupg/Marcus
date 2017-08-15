@@ -25,7 +25,7 @@ class UploadWorkerThread(threading.Thread):
         start_time = time.time()
         output_data = {"camera_uuid":self.config['uuid']}
         upload_files = [
-        ('jpeg_upload', ('image.jpg',self.uploadStream,"image/jpeg"))]
+        ('jpeg_upload', ('jpeg_upload',self.uploadStream,"image/jpeg"))]
 
         r = requests.post(self.uploadUrl,files=upload_files,data=output_data)
         elapsed = time.time() - start_time
@@ -83,7 +83,7 @@ class CameraMonitor(threading.Thread):
             newWorker = UploadWorkerThread(upload_bytes,self.logger)
             newWorker.start()
             frames += 1
-            if time.time() - start > 30:
+            if time.time() - start > 5:
                 fps = float(frames) / 30.0
                 self.logger.info("Avg framerate: %0.2f fps" % fps)
                 if self.timeout and time.time() - start > self.timeout:
