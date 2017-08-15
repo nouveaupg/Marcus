@@ -92,9 +92,7 @@ class CameraMonitor(threading.Thread):
 if __name__ == '__main__':
     try:
         f = file("remote-config.json","r")
-        config_data = json.load(f)
-        if "remote-host" in config_data:
-
+        config_data = json.load(f)        
         if 'uuid' not in config_data:
             config_data['uuid'] = str(uuid.uuid4())
             f.close()
