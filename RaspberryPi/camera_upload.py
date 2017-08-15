@@ -80,9 +80,18 @@ class CameraMonitor(threading.Thread):
             self.last_image.seek(0)
             # upload to AWS
             self.logger.info("Uploading image...")
-            newWorker = UploadWorkerThread(upload_bytes,self.logger)
-            newWorker.start()
+            start_time = time.time()
+            output_data = {"camera_uuid":self.config['uuid']}
+            upload_files = [
+            ('jpeg_upload', ('jpeg_upload',last_image,"image/jpeg"))]
+
+            r = requests.post(self.uploadUrl,files=upload_files,data=output_data)
+            elapsed = time.time() - start_time
+            self.logger.info("Uploaded image to server in %0.2f seconds. (tid %d)" % (elapsed,self.ident))
+            #newWorker.start()
             frames += 1
+            if frames > 5:
+                import sys;sys.exit(0)
             if time.time() - start > 5:
                 fps = float(frames) / 30.0
                 self.logger.info("Avg framerate: %0.2f fps" % fps)
