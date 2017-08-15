@@ -92,7 +92,7 @@ class CameraMonitor(threading.Thread):
 if __name__ == '__main__':
     try:
         f = file("remote-config.json","r")
-        config_data = json.load(f)        
+        config_data = json.load(f)
         if 'uuid' not in config_data:
             config_data['uuid'] = str(uuid.uuid4())
             f.close()
@@ -103,7 +103,6 @@ if __name__ == '__main__':
     except IOError:
         # couldn't open file
         print "Couldn't open remote-config.json make sure it exits..."
-        os.exit(1)
     print "Starting camera thread with 30 second timeout..."
     monitor = CameraMonitor(30)
     monitor.start()
