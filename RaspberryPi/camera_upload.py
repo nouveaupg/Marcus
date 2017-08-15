@@ -25,12 +25,11 @@ class UploadWorkerThread(threading.Thread):
         start_time = time.time()
         output_data = {"camera_uuid":self.config['uuid']}
         upload_files = [
-        ('json', ('json',json.dumps(output_data),"application/json")),
-        ('image.jpg', ('image.jpg',self.uploadStream,"image/jpeg"))]
+        ('jpeg_upload', ('image.jpg',self.uploadStream,"image/jpeg"))]
 
         r = requests.post(self.uploadUrl,files=upload_files)
         elapsed = time.time() - start_time
-        self.logger.info("Uploaded image to AWS in %0.2f seconds. (tid %d)" % (elapsed,self.ident))
+        self.logger.info("Uploaded image to server in %0.2f seconds. (tid %d)" % (elapsed,self.ident))
 
 class CameraMonitor(threading.Thread):
     def __init__(self,timeout=None):
