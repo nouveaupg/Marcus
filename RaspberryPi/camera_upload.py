@@ -27,7 +27,7 @@ class UploadWorkerThread(threading.Thread):
         upload_files = [
         ('jpeg_upload', ('image.jpg',self.uploadStream,"image/jpeg"))]
 
-        r = requests.post(self.uploadUrl,files=upload_files)
+        r = requests.post(self.uploadUrl,files=upload_files,data=output_data)
         elapsed = time.time() - start_time
         self.logger.info("Uploaded image to server in %0.2f seconds. (tid %d)" % (elapsed,self.ident))
 
@@ -79,7 +79,7 @@ class CameraMonitor(threading.Thread):
             self.last_image.write(upload_bytes)
             self.last_image.seek(0)
             # upload to AWS
-            self.logger.info("Uploading image to AWS...")
+            self.logger.info("Uploading image...")
             newWorker = UploadWorkerThread(upload_bytes,self.logger)
             newWorker.start()
             frames += 1
