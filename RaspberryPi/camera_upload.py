@@ -50,51 +50,26 @@ class CameraMonitor(threading.Thread):
         self.config = json.load(file("remote-config.json","r"))
         self.uploadUrl = self.config['remote-host'] + "/upload/"
     def run(self):
-        camera = PiCamera()
-        camera.resolution = (640, 480)
-
+        camera = PiCamera(resolution=(640,480),framerate=1,sensor_mode=3)
         self.logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
-
-        # Start a preview and let the camera warm up for 2 seconds
-        camera.start_preview()
-        time.sleep(2)
-
-        # Note the start time and construct a stream to hold image data
-        # temporarily (we could write it directly to connection but in this
-        # case we want to find out the size of each capture first to keep
-        # our protocol simple)
-        start = time.time()
+        time.sleep(30)
         self.logger.info("Camera ready - beginning capture...")
         stream = io.BytesIO()
         frames = 0
-        for foo in camera.capture_continuous(stream, 'jpeg'):
-            # Write the length of the capture to the stream and flush to
-            # ensure it actually gets sent
-            # self.logger.debug("Uploading image...")
-            stream.seek(0)
-            # copy last image to local cache
-            self.last_image = io.BytesIO()
-            upload_bytes = stream.read()
-            stream.seek(0)
-            self.last_image.write(upload_bytes)
-            self.last_image.seek(0)
-            # upload to AWS
-            self.logger.info("Uploading image...")
-            start_time = time.time()
-            output_data = {"camera_uuid":self.config['uuid']}
-            upload_files = {'jpeg_upload':('jpeg_upload',last_image,"image/jpeg")}
-            r = requests.post(self.uploadUrl,files=upload_files,data=output_data)
-            elapsed = time.time() - start_time
-            self.logger.info("Uploaded image to server in %0.2f seconds. (tid %d)" % (elapsed,self.ident))
-            #newWorker.start()
-            frames += 1
-            if frames > 5:
-                import sys;sys.exit(0)
-            if time.time() - start > 5:
-                fps = float(frames) / 30.0
-                self.logger.info("Avg framerate: %0.2f fps" % fps)
-                if self.timeout and time.time() - start > self.timeout:
+
+        while 1:
+            try:
+                camera.capture(stream,"jpeg")
+                self.logger.info("Captured image, uploading...")
+                worker = UploadWorkerThread(stream.read())
+                stream.seek(0)
+                stream.truncate()
+                frames += 1
+                if frames < 5:
                     break
+            except e:
+                print str(e)
+                break
 
 if __name__ == '__main__':
     try:
