@@ -31,6 +31,7 @@ if __name__ == '__main__':
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(logging.Formatter(LOG_FORMAT))
     sh = logging.StreamHandler()
+    sh.setFormatter(logging.Formatter(LOG_FORMAT))
     sh.setLevel(logging.INFO)
     logger.addHandler(fh)
     logger.addHandler(sh)
@@ -49,16 +50,18 @@ if __name__ == '__main__':
     while 1:
         try:
             camera.capture(stream,"jpeg")
-            self.logger.info("Captured image, uploading...")
-            output_data = {"camera_uuid",self.config['uuid']}
-            output_files = {"file":('jpeg_upload',stream,"image/jpeg")}
+            logger.info("Captured image, uploading...")
+            output_data = {"camera_uuid":config['uuid']}
+            output_files = {"jpeg_upload":('jpeg_upload',stream,"image/jpeg")}
             stream.seek(0)
-            r = requests.post(self.uploadUrl,files=output_files,data=output_data)
+            r = requests.post(uploadUrl,files=output_files,data=output_data)
             stream.seek(0)
             stream.truncate()
             frames += 1
             if frames < 5:
+                os.exit(0)
                 break
         except e:
             print str(e)
+            os.exit(1)
             break
