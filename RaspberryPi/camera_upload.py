@@ -10,27 +10,6 @@ from picamera import PiCamera
 
 LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
 
-class UploadWorkerThread(threading.Thread):
-    def __init__(self,upload_bytes,logger):
-        threading.Thread.__init__(self)
-        self.logger = logger
-        # load config dict
-        self.config = json.load(file("remote-config.json","r"))
-        self.uploadUrl = self.config['remote-host'] + "/upload/"
-        # stream to upload
-        self.uploadStream = io.BytesIO()
-        self.uploadStream.write(upload_bytes)
-        self.uploadStream.seek(0)
-    def run(self):
-        start_time = time.time()
-        output_data = {"camera_uuid":self.config['uuid']}
-        upload_files = [
-        ('jpeg_upload', ('jpeg_upload',self.uploadStream,"image/jpeg"))]
-
-        r = requests.post(self.uploadUrl,files=upload_files,data=output_data)
-        elapsed = time.time() - start_time
-        self.logger.info("Uploaded image to server in %0.2f seconds. (tid %d)" % (elapsed,self.ident))
-
 class CameraMonitor(threading.Thread):
     def __init__(self,timeout=None):
         threading.Thread.__init__(self)
@@ -61,7 +40,10 @@ class CameraMonitor(threading.Thread):
             try:
                 camera.capture(stream,"jpeg")
                 self.logger.info("Captured image, uploading...")
-                worker = UploadWorkerThread(stream.read())
+                output_data = {"camera_uuid",self.config['uuid']}
+                output_files = {"file":('jpeg_upload',stream,"image/jpeg")}
+                stream.seek(0)
+                r = requests.post(self.uploadUrl,files=output_files,data=output_data)
                 stream.seek(0)
                 stream.truncate()
                 frames += 1
