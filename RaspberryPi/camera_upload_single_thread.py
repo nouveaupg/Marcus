@@ -1,3 +1,15 @@
+import time
+import io
+import json
+import logging
+import threading
+import requests
+import uuid
+import os
+from picamera import PiCamera
+
+LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
+
 if __name__ == '__main__':
     try:
         f = file("remote-config.json","r")
