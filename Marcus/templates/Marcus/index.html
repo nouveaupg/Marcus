@@ -10,6 +10,9 @@
         $("#remove_camera_link").click(function(){
           $("#remove_camera").toggle();
         });
+        $.post("json-api/",function(data,textStatus,jqXHR){
+          console.log(data.stringfiy())
+        });
     });
     </script>
     <style type="text/css">
