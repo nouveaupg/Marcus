@@ -26,8 +26,8 @@ if __name__ == '__main__':
     except IOError:
         # couldn't open file
         print "Couldn't open remote-config.json make sure it exits..."
-        os.exit(3)
-    print "Starting camera thread with 30 second timeout..."
+        os._exit(3)
+    print "Starting camera thread with 10 second timeout..."
     FORMAT = '%(asctime)-15s %(message)s'
     logger = logging.getLogger(__name__ + ".CameraMonitor")
     fh = logging.FileHandler("CameraMonitor.log")
@@ -43,10 +43,10 @@ if __name__ == '__main__':
     config = json.load(file("remote-config.json","r"))
     uploadUrl = config['remote-host'] + "/upload/"
     # starting the camera
-    camera = PiCamera(resolution=(640,480),framerate=Fraction(1,10),sensor_mode=3)
+    camera = PiCamera(resolution=(800,600),framerate=1,sensor_mode=3)
     camera.iso = 100
     logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
-    time.sleep(2)
+    time.sleep(10)
     logger.info("Camera ready - beginning capture...")
     stream = io.BytesIO()
     frames = 0
@@ -62,15 +62,15 @@ if __name__ == '__main__':
             request_data = r.json()
             if "success" in request_data and request_data['success'] == False:
                 logger.error("Failed to upload image: %s" % )
-                os.exit(2)
+                os._exit(2)
                 break
             stream.seek(0)
             stream.truncate()
             frames += 1
-            if frames < 5:
-                os.exit(0)
+            if frames < 600:
+                os._exit(0)
                 break
         except Exception as e:
             print str(e)
-            os.exit(1)
+            os._exit(1)
             break

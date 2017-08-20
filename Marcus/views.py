@@ -6,7 +6,7 @@ from .models import RemoteCamera, Frame
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
 
-BASE_IMAGE_DIR = "/usr/share/nginx/html/uploaded_files/"
+BASE_IMAGE_DIR = "/var/www/"
 
 import json
 import uuid
@@ -47,7 +47,7 @@ def latest_still(request):
         camera = RemoteCamera.objects.get(id=camera_number)
         camera_stills = Frame.objects.filter(owner=camera)
         latest_still = camera_stills.latest("timestamp")
-        f = file(BASE_IMAGE_DIR + str(latest_still.url),"r")
+        f = file(str(latest_still.url),"r")
         jpeg_data = f.read()
         return HttpResponse(jpeg_data,content_type="image/jpeg")
     except:
@@ -70,7 +70,7 @@ def upload(request):
                 new_frame = Frame.objects.create(owner=camera,url=new_frame_url)
                 camera.ip_addr = request_ip_addr
                 camera.save()
-                return HttpResponse("{\"success\":true,\"url\":" + new_frame_url + "}")
+                return HttpResponse("{\"success\":true,\"url\":\"" + new_frame_url + "\"}")
             except ObjectDoesNotExist:
                 return HttpResponse("{\"success\":false,\"error\":\"Unregistered camera UUID\"}")
     else:

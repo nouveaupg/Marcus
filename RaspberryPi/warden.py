@@ -9,7 +9,7 @@ if __name__ == '__main__':
     epoch = time.time()
     retry = True
     while retry:
-        exit_code = subprocess.call("python camera_upload_single_thread.py",shell=True)
+        exit_code = subprocess.call(["python", "camera_upload_single_thread.py"],shell=True)
         if time.time() - epoch > FAILURE_RESET:
             failures = 0
             epoch = time.time()
