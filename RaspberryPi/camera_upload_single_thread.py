@@ -59,6 +59,7 @@ if __name__ == '__main__':
             output_files = {"jpeg_upload":('jpeg_upload',stream,"image/jpeg")}
             stream.seek(0)
             r = requests.post(uploadUrl,files=output_files,data=output_data)
+            print r.text
             request_data = r.json()
             if "success" in request_data and request_data['success'] == False:
                 logger.error("Failed to upload image: %s" % )
