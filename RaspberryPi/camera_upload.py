@@ -47,10 +47,9 @@ class CameraMonitor(threading.Thread):
                 stream.seek(0)
                 stream.truncate()
                 frames += 1
-                if frames < 5:
-                    break
-            except e:
+            except Exception as e:
                 print str(e)
+
                 break
 
 if __name__ == '__main__':
@@ -67,6 +66,7 @@ if __name__ == '__main__':
     except IOError:
         # couldn't open file
         print "Couldn't open remote-config.json make sure it exits..."
+        os.exit(3)
     print "Starting camera thread with 30 second timeout..."
     monitor = CameraMonitor(30)
     monitor.start()

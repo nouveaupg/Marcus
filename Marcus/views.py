@@ -81,9 +81,22 @@ def upload(request):
 def json_api(request):
     json_data_in = json.loads(request.body);
     if 'action' in json_data_in:
-        if json_data_in['action'] == "newCamera":
-            new_camera = RemoteCamera.objects.create(name=json_data_in['newCameraIdentifier'],
-                                                    uuid=json_data_in['newCameraUuid'])
-            new_camera.save()
-            return HttpResponse(str(json_data_in))
+        if json_data_in['action'] == "getCameraData":
+            output = {}
+            camera_list = RemoteCamera.objects.all()
+            for each_camera in camera_list:
+                all_frames = Frame.objects.filter(uuid=each_camera.uuid)
+                frame_count = all_frames.count()
+                earliest_frame = all_frames[1:]
+                latest_frame = all_frames[:1]
+                output[each_camera.uuid] = {
+                    "frames":frame_count,
+                    "earliest_frame_timestamp":earliest_frame.timestamp,
+                    "latest_frame_timestamp":latest_frame.timestamp,
+                    "latest_frame_url":latest_frame.url
+                }
+            return HttpResponse(json.dumps({
+                "success":True,
+                "cameras":output
+            }))
     return HttpResponse("{\"success\":false}")

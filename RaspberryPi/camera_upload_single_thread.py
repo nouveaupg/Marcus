@@ -6,6 +6,7 @@ import threading
 import requests
 import uuid
 import os
+from exceptions import Exception
 from picamera import PiCamera
 
 LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
@@ -24,6 +25,7 @@ if __name__ == '__main__':
     except IOError:
         # couldn't open file
         print "Couldn't open remote-config.json make sure it exits..."
+        os.exit(3)
     print "Starting camera thread with 30 second timeout..."
     FORMAT = '%(asctime)-15s %(message)s'
     logger = logging.getLogger(__name__ + ".CameraMonitor")
@@ -41,27 +43,32 @@ if __name__ == '__main__':
     uploadUrl = config['remote-host'] + "/upload/"
     # starting the camera
     camera = PiCamera(resolution=(640,480),framerate=1,sensor_mode=3)
-    self.logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
+    logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
     time.sleep(30)
-    self.logger.info("Camera ready - beginning capture...")
+    logger.info("Camera ready - beginning capture...")
     stream = io.BytesIO()
     frames = 0
 
     while 1:
         try:
             camera.capture(stream,"jpeg")
-            logger.info("Captured image, uploading...")
+            logger.info("Captured image, uploading to %s..." % config['remote-host'])
             output_data = {"camera_uuid":config['uuid']}
             output_files = {"jpeg_upload":('jpeg_upload',stream,"image/jpeg")}
             stream.seek(0)
             r = requests.post(uploadUrl,files=output_files,data=output_data)
+            request_data = r.json()
+            if "success" in request_data and request_data['success'] == False:
+                logger.error("Failed to upload image: %s" % )
+                os.exit(2)
+                break
             stream.seek(0)
             stream.truncate()
             frames += 1
             if frames < 5:
                 os.exit(0)
                 break
-        except e:
+        except Exception as e:
             print str(e)
             os.exit(1)
             break
