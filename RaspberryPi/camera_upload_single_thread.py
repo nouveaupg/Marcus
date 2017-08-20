@@ -6,6 +6,7 @@ import threading
 import requests
 import uuid
 import os
+from fractions import Fraction
 from exceptions import Exception
 from picamera import PiCamera
 
@@ -42,9 +43,10 @@ if __name__ == '__main__':
     config = json.load(file("remote-config.json","r"))
     uploadUrl = config['remote-host'] + "/upload/"
     # starting the camera
-    camera = PiCamera(resolution=(640,480),framerate=1,sensor_mode=3)
+    camera = PiCamera(resolution=(640,480),framerate=Fraction(1,10),sensor_mode=3)
+    camera.iso = 100
     logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
-    time.sleep(30)
+    time.sleep(2)
     logger.info("Camera ready - beginning capture...")
     stream = io.BytesIO()
     frames = 0
