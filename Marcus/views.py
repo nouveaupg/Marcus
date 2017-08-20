@@ -6,7 +6,7 @@ from .models import RemoteCamera, Frame
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
 
-BASE_IMAGE_DIR = "./"
+BASE_IMAGE_DIR = "/usr/share/nginx/html/uploaded_files/"
 
 import json
 import uuid
@@ -47,7 +47,7 @@ def latest_still(request):
         camera = RemoteCamera.objects.get(id=camera_number)
         camera_stills = Frame.objects.filter(owner=camera)
         latest_still = camera_stills.latest("timestamp")
-        f = file(str(latest_still.url),"r")
+        f = file(BASE_IMAGE_DIR + str(latest_still.url),"r")
         jpeg_data = f.read()
         return HttpResponse(jpeg_data,content_type="image/jpeg")
     except:
