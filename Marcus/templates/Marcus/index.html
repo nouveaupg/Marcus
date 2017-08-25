@@ -12,6 +12,13 @@
         $("#remove_camera_link").click(function(){
           $("#remove_camera").toggle();
         });
+
+        {% if camera_list %}
+          {% for each_camera in camera_list %}
+            $("#timeslider_{{ each_camera.uuid }}").slider()
+          {% endfor %}
+        {% endif %}
+
         $(".camera_timeslider").slider();
         data_dump = JSON.stringify({"action":"getCameraData"});
 	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
@@ -27,6 +34,7 @@
     });
     </script>
     <style type="text/css">
+
       #add_camera { display: none; width:340px; padding: 5px; }
       #add_camera_name { padding: 3px; }
       #add_camera_uuid { padding: 3px; }
