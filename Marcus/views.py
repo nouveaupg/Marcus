@@ -107,7 +107,7 @@ def json_api(request):
             offset = json_data_in["offset"]
             if offset >= 0 and offset < all_frames.count():
                 frame = all_frames[offset]
-                output["frame_url"] = BASE_IMAGE_DIR + frame.url
+                output["frame_url"] = frame.url
                 # change timestamp into something JSON can handle
                 output["frame_timestamp"] = frame.timestamp.isoformat()
                 output["success"] = True
