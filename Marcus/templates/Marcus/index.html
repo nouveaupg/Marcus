@@ -20,7 +20,7 @@
               function() {
                 var new_value = $(this).val();
                 var data_dump = JSON.stringify({"action":"get_frame_info",
-                                                "camera_uuid":{{ each_camera.uuid }},
+                                                "camera_uuid":"{{ each_camera.uuid }}",
                                               "offset":new_value});
                 $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
                   response_data = JSON.parse(data);
