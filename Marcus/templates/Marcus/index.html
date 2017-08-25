@@ -1,9 +1,9 @@
 <html>
   <head>
     <title>Remote Cameras</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" />
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/JavaScript">
     $(document).ready(function() {
         $("#add_camera_link").click(function() {
@@ -50,7 +50,7 @@
     <ul>
     {% for each_camera in camera_list %}
       <li><h2>{{ each_camera.name }}</h2>
-      <div class="camera_timeslider" id="timeslider_{{ each_camera.uuid }}"></div><span class="timestamp" id="timestamp_" + {{ each_camera.uuid }} + "><span>"
+      <div class="camera_timeslider" id="timeslider_{{ each_camera.uuid }}"></div><span class="timestamp" id="timestamp_{{ each_camera.uuid }}"></span>
       <div class="camera_still"><img id="camera_frame_{{ each_camera.id }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
       <div class="camera_uuid_display"><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
       <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div>
