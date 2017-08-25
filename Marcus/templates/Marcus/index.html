@@ -50,7 +50,7 @@
     <ul>
     {% for each_camera in camera_list %}
       <li><h2>{{ each_camera.name }}</h2>
-      <div class="camera_timeslider" id="timeslider_{{ each_camera.uuid }}"></div><div class="timestamp" id="#timestamp_{{ each_camera.uuid }}"></div>
+      <div class="camera_timeslider" id="timeslider_{{ each_camera.uuid }}"></div><div class="timestamp" id="timestamp_{{ each_camera.uuid }}"></div>
       <div class="camera_still"><img id="camera_frame_{{ each_camera.id }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
       <div class="camera_uuid_display"><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
       <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div>
