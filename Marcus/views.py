@@ -6,7 +6,7 @@ from .models import RemoteCamera, Frame
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
 
-BASE_IMAGE_DIR = "/var/www/"
+BASE_IMAGE_DIR = "/usr/share/nginx/html/uploaded_files/"
 
 import json
 import uuid
