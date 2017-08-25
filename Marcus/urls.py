@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
@@ -22,5 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^json-api/$',views.json_api),
     url(r'^upload/$',views.upload),
+    url(r'^accounts/login/$', auth_views.LoginView.as_view()),
     url(r'^camera/[0-9]{1,2}/latest_still.jpg$',views.latest_still)
 ]
