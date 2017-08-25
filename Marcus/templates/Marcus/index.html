@@ -16,7 +16,7 @@
         {% if camera_list %}
           {% for each_camera in camera_list %}
             $("#timeslider_{{ each_camera.uuid }}").slider();
-            $("#timeslider_{{ each_camera.uuid }}").change(
+            $("#timeslider_{{ each_camera.uuid }}").on("focus",
               function() {
                 var new_value = $(this).val();
                 var data_dump = JSON.stringify({"action":"get_frame_info",
