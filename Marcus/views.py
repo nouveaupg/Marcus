@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 BASE_IMAGE_DIR = "/usr/share/nginx/html/uploaded_files/"
+BASE_IMAGE_URL = "http://6846cedarcove.webcam/uploaded_images/"
 
 import json
 import uuid
@@ -19,7 +20,6 @@ class UploadFileForm(forms.Form):
 
 
 @csrf_exempt
-@login_required(login_url='/accounts/login/')
 def index(request):
     if request.method == "POST":
         if "new_camera_uuid" in request.POST:

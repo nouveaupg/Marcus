@@ -16,10 +16,29 @@
         {% if camera_list %}
           {% for each_camera in camera_list %}
             $("#timeslider_{{ each_camera.uuid }}").slider()
+            $("#timeslider_{{ each_camera.uuid }}").change(
+              function() {
+                var new_value = $(this).val();
+                var data_dump = JSON.stringify({"action":"get_frame_info",
+                                                "camera_uuid":{{ each_camera.uuid }},
+                                              "offset":new_value});
+                $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
+                  response_data = JSON.parse(data);
+                  if (response_data['success'] == true) {
+                    $("#camera_frame_{{ each_camera.id }}").attr('src',"http://6846cedarcove.webcam/uploaded_images/" + response_data['frame_url']);
+                    $("#timestamp_{{ each_camera.uuid }}").text(response_data['frame_timestamp']);
+                  }
+                  else {
+                    alert("Error updating camera(s)!");
+                  }
+                });
+              }
+            });
           {% endfor %}
         {% endif %}
 
-        data_dump = JSON.stringify({"action":"getCameraData"});
+
+        var data_dump = JSON.stringify({"action":"getCameraData"});
 	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
           response_data = JSON.parse(data);
           if (response_data['success'] == true) {
@@ -31,7 +50,7 @@
               widget.slider("option","max",camera_data[each]["frames"]-1);
               widget.slider("value",camera_data[each]["frames"]-1);
               $(timeslider_id + " span").css("left","100%");
-              $("#timestamp_" + each).text(camera_data[each]['latest_frame_timestamp'])
+              $("#timestamp_" + each).text(camera_data[each]['latest_frame_timestamp']);
             }
           }
           else {
