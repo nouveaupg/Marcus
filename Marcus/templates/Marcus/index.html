@@ -24,11 +24,13 @@
 	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
           response_data = JSON.parse(data);
           for( each in response_data ) {
-            var widget_id = "#timeslider_" + each;
-            $(widget_id).slider("option","min",0);
-            $(widget_id).slider("option","max",response_data[each]["frames"]);
-            $(widget_id).slider("value",response_data[each]["frames"]-1);
-            $("#timestamp_" + each).text(response_data[each]["latest_frame_timestamp"]);
+            var widget_id = $("#timeslider_" + each);
+            widget.slider("option","min",0);
+            widget.slider("option","max",response_data[each]["frames"]);
+            widget.slider("value",response_data[each]["frames"]-1);
+            widget.slider('option','slide').
+                call(widget,null,{ handle: $('.ui-slider-handle', widget),
+                 value: response_data[each]["frames"]-1 });            $("#timestamp_" + each).text(response_data[each]["latest_frame_timestamp"]);
           }
         });
     });
