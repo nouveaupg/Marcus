@@ -94,8 +94,8 @@ def json_api(request):
                     output[each_camera.uuid] = {
                         "frames":frame_count,
                         "earliest_frame_timestamp":earliest_frame[3],
-                        "latest_frame_timestamp":earliest_frame[3],
-                        "latest_frame_url":earliest_frame[2]
+                        "latest_frame_timestamp":latest_frame[3],
+                        "latest_frame_url":latest_frame[2]
                     }
                 else:
                     output[each_camera.uuid] = {"frames":0}
