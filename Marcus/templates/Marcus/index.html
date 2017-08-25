@@ -15,7 +15,7 @@
 
         {% if camera_list %}
           {% for each_camera in camera_list %}
-            $("#timeslider_{{ each_camera.uuid }}").slider()
+            $("#timeslider_{{ each_camera.uuid }}").slider();
             $("#timeslider_{{ each_camera.uuid }}").change(
               function() {
                 var new_value = $(this).val();
