@@ -101,7 +101,7 @@ def json_api(request):
                 "cameras":output
             }))
         elif json_data_in['action'] == "get_frame_info":
-            output = {"success":false}
+            output = {"success":False}
             camera = RemoteCamera.objects.get(uuid=json_data_in["camera_uuid"])
             all_frames = Frame.objects.filter(owner=camera)
             offset = json_data_in["offset"]
@@ -109,7 +109,7 @@ def json_api(request):
                 frame = all_frames[offset]
                 output["frame_url"] = BASE_IMAGE_DIR + frame.url
                 output["frame_timestamp"] = frame.timestamp
-                output["success"] = true
+                output["success"] = True
                 return HttpResponse(json.dumps(output))
 
     return HttpResponse("{\"success\":false}")
