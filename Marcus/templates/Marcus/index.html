@@ -11,7 +11,7 @@
           $("#remove_camera").toggle();
         });
         data_dump = {"action":"getCameraData"};
-	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR)){
+	      $.post("json-api/",data_dump.stringfiy(),function(data,textStatus,jqXHR)){
           console.log(data.stringfiy())
         });
     });
@@ -50,7 +50,7 @@
   <ul>
     <li>
       <a id="add_camera_link" href="#">Add Camera</a>
-      <form id="add_camera">
+      <form id="add_camera" method="post">
         <div id="add_camera_name"><input name="new_camera_name" size="55" placeholder="Camera Description" /></div>
         <div id="add_camera_uuid"><input name="new_camera_uuid" size="55" placeholder="Camera UUID" /></div>
         <div id="new_camera_button" align="right"><input type="submit" id="new_camera_btn" /></div>
