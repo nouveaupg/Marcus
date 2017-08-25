@@ -10,7 +10,8 @@
         $("#remove_camera_link").click(function(){
           $("#remove_camera").toggle();
         });
-        $.post("json-api/",function(data,textStatus,jqXHR){
+        data_dump = {"action":"getCameraData"};
+	$.post("json-api/",success:function(data,textStatus,jqXHR,data=data_dump){
           console.log(data.stringfiy())
         });
     });
