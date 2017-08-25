@@ -93,8 +93,8 @@ def json_api(request):
                     latest_frame = frame_list[frame_count-1]
                     output[each_camera.uuid] = {
                         "frames":frame_count,
-                        "earliest_frame_timestamp":earliest_frame[3],
-                        "latest_frame_timestamp":latest_frame[3],
+                        "earliest_frame_timestamp":earliest_frame[3].isoformat(),
+                        "latest_frame_timestamp":latest_frame[3].isoformat(),
                         "latest_frame_url":latest_frame[2]
                     }
                 else:
