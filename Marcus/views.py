@@ -86,11 +86,10 @@ def json_api(request):
             camera_list = RemoteCamera.objects.all()
             for each_camera in camera_list:
                 all_frames = Frame.objects.filter(owner=each_camera.id)
-                frame_list = all_frames.values_list()
-                frame_count = len(all_frames)
+                frame_count = all_frames.count()
                 if frame_count > 0:
-                    earliest_frame = frame_list[0]
-                    latest_frame = frame_list[frame_count-1]
+                    frame_query = all_frames.latest("timestamp")
+                    latest_frame = frame_query.values()
                     output[each_camera.uuid] = {
                         "frames":frame_count,
                         "latest_frame_timestamp":latest_frame[3].isoformat(),

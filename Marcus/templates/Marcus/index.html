@@ -20,7 +20,7 @@
             var widget_id = "#timeslider_" + each;
             $(widget_id).slider("option","min",0);
             $(widget_id).slider("option","max",response_data[each]["frames"]);
-            $(widget_id).slider("value",response_data[each]["frames"]);
+            $(widget_id).slider("value",response_data[each]["frames"]-1);
             $("#timestamp_" + each).text(response_data[each]["latest_frame_timestamp"]);
           }
         });
@@ -33,7 +33,7 @@
       #new_camera_button { padding: 3px; }
       #remove_camera { display: none; }
       .camera_timeslider {width: 480px;
-      margin: 10px;}
+      margin: 30px;}
       .camera_uuid_display {
         margin-top:30px;
       }
