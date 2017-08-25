@@ -88,8 +88,7 @@ def json_api(request):
                 all_frames = Frame.objects.filter(owner=each_camera.id)
                 frame_count = all_frames.count()
                 if frame_count > 0:
-                    frame_query = all_frames.latest("timestamp")
-                    latest_frame = frame_query.values()
+                    latest_frame = all_frames.latest("timestamp")
                     output[each_camera.uuid] = {
                         "frames":frame_count,
                         "latest_frame_timestamp":latest_frame.timestamp.isoformat(),
