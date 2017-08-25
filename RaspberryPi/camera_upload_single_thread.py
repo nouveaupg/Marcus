@@ -13,6 +13,15 @@ from picamera import PiCamera
 LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
 
 if __name__ == '__main__':
+    arguments = os.argv
+    valid = False
+    if len(argv) > 1:
+        iso_value = int(argv[1])
+        if iso_value >= 100 and iso_value <= 800 and iso_value % 100 == 0:
+            valid = True
+    if not valid:
+        print "Please use a valid iso number as an argument 'python camera_upload_single_thread.py 100'"
+        os._exit(4)
     try:
         f = file("remote-config.json","r")
         config_data = json.load(f)
@@ -43,7 +52,7 @@ if __name__ == '__main__':
     config = json.load(file("remote-config.json","r"))
     uploadUrl = config['remote-host'] + "/upload/"
     # starting the camera
-    camera = PiCamera(resolution=(800,600),framerate=1,sensor_mode=3)
+    camera = PiCamera(resolution=(640,480),framerate=1,sensor_mode=3)
     camera.iso = 100
     logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
     time.sleep(10)
@@ -62,13 +71,13 @@ if __name__ == '__main__':
             print r.text
             request_data = r.json()
             if "success" in request_data and request_data['success'] == False:
-                logger.error("Failed to upload image: %s" % )
+                logger.error("Failed to upload image: %s" % uploadUrl )
                 os._exit(2)
                 break
             stream.seek(0)
             stream.truncate()
             frames += 1
-            if frames < 600:
+            if frames > 600:
                 os._exit(0)
                 break
         except Exception as e:
