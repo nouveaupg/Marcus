@@ -10,7 +10,7 @@
         $("#remove_camera_link").click(function(){
           $("#remove_camera").toggle();
         });
-        data_dump = JSON.stringfy({"action":"getCameraData"});
+        data_dump = JSON.stringify({"action":"getCameraData"});
 	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
           console.log(data.stringfiy())
         });
