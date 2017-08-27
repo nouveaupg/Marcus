@@ -12,12 +12,10 @@ BASE_IMAGE_URL = "http://6846cedarcove.webcam/uploaded_images/"
 
 import json
 import uuid
-import re
 
 class UploadFileForm(forms.Form):
     camera_uuid = forms.CharField(36)
     frame = forms.FileField()
-
 
 @login_required(login_url='/accounts/login/')
 def index(request):
