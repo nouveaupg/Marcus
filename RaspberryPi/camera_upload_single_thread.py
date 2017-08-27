@@ -22,9 +22,9 @@ LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
 
 if __name__ == '__main__':
     arguments = sys.argv
-    valid = False
+    arguments = False
     if len(argv) > 1:
-        iso_value = int(argv[1])
+        iso_value = int(arguments[1])
         if iso_value >= 100 and iso_value <= 800 and iso_value % 100 == 0:
             valid = True
     if not valid:
