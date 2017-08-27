@@ -15,13 +15,11 @@
 
         {% if camera_list %}
           {% for each_camera in camera_list %}
-            $("#timeslider_{{ each_camera.uuid }}").slider();
-            $("#timeslider_{{ each_camera.uuid }}").on("focus",
-              function() {
-                var new_value = $(this).val();
+            $("#timeslider_{{ each_camera.uuid }}").slider({change:
+              function(event,ui) {
                 var data_dump = JSON.stringify({"action":"get_frame_info",
                                                 "camera_uuid":"{{ each_camera.uuid }}",
-                                              "offset":new_value});
+                                              "offset":ui.value});
                 $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
                   response_data = JSON.parse(data);
                   if (response_data['success'] == true) {
@@ -41,7 +39,7 @@
 	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
           response_data = JSON.parse(data);
           if (response_data['success'] == true) {
-            var camera_data = response_data["cameras"]
+            var camera_data = response_data["cameras"];
             for( each in camera_data ) {
               var timeslider_id = "#timeslider_" + each;
               var widget = $(timeslider_id);

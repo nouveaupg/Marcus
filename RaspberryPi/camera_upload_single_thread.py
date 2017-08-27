@@ -10,6 +10,13 @@ from fractions import Fraction
 from exceptions import Exception
 from picamera import PiCamera
 
+# for some reason things were going wonky with the multithreaded
+# version, PiCamera is not thread safe but the threading was just
+# for uploading images (so the main thread could focus on pulling images).
+# Multithreaded version seemed to be
+# working a few monthes ago, might be the difference between V1 and
+# v2 cameras
+
 LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
 
 if __name__ == '__main__':
@@ -52,6 +59,9 @@ if __name__ == '__main__':
     config = json.load(file("remote-config.json","r"))
     uploadUrl = config['remote-host'] + "/upload/"
     # starting the camera
+    # configuring things is really an art not a science
+    # read that the manufacturer offers no guidence to
+    # hobbiests on to best use this
     camera = PiCamera(resolution=(640,480),framerate=1,sensor_mode=3)
     camera.iso = 100
     logger.info("Activating camera module with resolution (%d,%d)" % camera.resolution)
