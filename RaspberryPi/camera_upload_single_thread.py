@@ -5,6 +5,7 @@ import logging
 import threading
 import requests
 import uuid
+import sys
 import os
 from fractions import Fraction
 from exceptions import Exception
@@ -20,7 +21,7 @@ from picamera import PiCamera
 LOG_FORMAT = '%(asctime)-15s %(levelname)s %(message)s'
 
 if __name__ == '__main__':
-    arguments = os.argv
+    arguments = sys.argv
     valid = False
     if len(argv) > 1:
         iso_value = int(argv[1])

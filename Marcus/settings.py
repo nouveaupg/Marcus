@@ -26,7 +26,7 @@ SECRET_KEY = ')aepdw^qtaneakrf9x)0%xwy^w!%83aio7+!(#^y(8ng1kzna-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'127.0.0.1']
+ALLOWED_HOSTS = [u'6846cedarcove.webcam']
 
 
 # Application definition
