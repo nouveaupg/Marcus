@@ -1,0 +1,17 @@
+#add_camera { display: none; width:340px; padding: 5px; }
+#add_camera_name { padding: 3px; }
+#add_camera_uuid { padding: 3px; }
+#new_camera_button { padding: 3px; }
+#remove_camera { display: none; }
+li {list-style-type: none;}
+.camera_timeslider {width: 480px;
+margin: 30px;}
+.camera_uuid_display {
+  margin-top:30px;
+}
+.camera_still {width: 640;
+              height: 480;
+              background-color: #cdcdcdcd;
+              -ms-transform: rotate(180deg); /* IE 9 */
+              -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+              transform: rotate(180deg);}
