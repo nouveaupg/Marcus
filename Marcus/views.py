@@ -19,7 +19,7 @@ class UploadFileForm(forms.Form):
     frame = forms.FileField()
 
 
-@csrf_exempt
+@login_required(login_url='/accounts/login/')
 def index(request):
     if request.method == "POST":
         if "new_camera_uuid" in request.POST:

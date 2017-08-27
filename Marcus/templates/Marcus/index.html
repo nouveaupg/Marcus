@@ -77,6 +77,7 @@
     <li>
       <a id="add_camera_link" href="#">Add Camera</a>
       <form id="add_camera" method="post">
+        {% csrf_token %}
         <div id="add_camera_name"><input name="new_camera_name" size="55" placeholder="Camera Description" /></div>
         <div id="add_camera_uuid"><input name="new_camera_uuid" size="55" placeholder="Camera UUID" /></div>
         <div id="new_camera_button" align="right"><input type="submit" id="new_camera_btn" /></div>
@@ -85,6 +86,7 @@
     <li>
       <a id="remove_camera_link" href="#">Remove Camera</a>
       <form id="remove_camera" method="post">
+        {% csrf_token %}
         {% if camera_list %}
           <select name="remove_camera_id">
           {% for each_camera in camera_list %}

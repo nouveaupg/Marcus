@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+#import views
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -121,3 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,"Marcus/static"),]
 STATIC_ROOT = "/usr/share/nginx/html/static"
+
+LOGIN_REDIRECT_URL = "/"
