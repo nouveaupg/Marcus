@@ -3,6 +3,8 @@
     <title>Remote Cameras</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" />
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "stylesheet.css" %}" />
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/JavaScript">
     $(document).ready(function() {
@@ -34,7 +36,6 @@
           {% endfor %}
         {% endif %}
 
-
         var data_dump = JSON.stringify({"action":"getCameraData"});
 	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
           response_data = JSON.parse(data);
@@ -56,26 +57,6 @@
         });
     });
     </script>
-    <style type="text/css">
-
-      #add_camera { display: none; width:340px; padding: 5px; }
-      #add_camera_name { padding: 3px; }
-      #add_camera_uuid { padding: 3px; }
-      #new_camera_button { padding: 3px; }
-      #remove_camera { display: none; }
-      li {list-style-type: none;}
-      .camera_timeslider {width: 480px;
-      margin: 30px;}
-      .camera_uuid_display {
-        margin-top:30px;
-      }
-      .camera_still {width: 640;
-                    height: 480;
-                    background-color: #cdcdcdcd;
-                    -ms-transform: rotate(180deg); /* IE 9 */
-                    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
-                    transform: rotate(180deg);}
-    </style>
   </head>
   <body>
   {% if camera_list %}

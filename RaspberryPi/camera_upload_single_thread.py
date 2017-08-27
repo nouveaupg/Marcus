@@ -33,7 +33,7 @@ if __name__ == '__main__':
         f = file("remote-config.json","r")
         config_data = json.load(f)
         if 'uuid' not in config_data:
-            config_data['uuid'] = str(uuid.uuid4())
+            config_data['uuid'] = str(uuid.uuid4()).upper()
             f.close()
             f = file("remote-config.json","w+")
             f.seek()
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     config = json.load(file("remote-config.json","r"))
     uploadUrl = config['remote-host'] + "/upload/"
     # starting the camera
-    # configuring things is really an art not a science
+    # configuring this thing is really an art not a science
     # read that the manufacturer offers no guidence to
     # hobbiests on to best use this
     camera = PiCamera(resolution=(640,480),framerate=1,sensor_mode=3)
