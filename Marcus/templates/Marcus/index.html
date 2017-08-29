@@ -54,6 +54,8 @@
           <button style="vertical-align:top" id="previous_timeslide_{{ each_camera.uuid }}">Previous Frame</button>&nbsp;
           <button style="vertical-align:top" id="next_timeslide_{{ each_camera.uuid }}">Next Frame</button>&nbsp;
           <button style="vertical-align:top" class="refresh">Refresh</button>
+          <input type="checkbox" class="auto_refresh">Auto-refresh every</input>
+          <input type="text" size="2" value="5"></input><span style="margin-left:7px">seconds.</span>
         </div>
         <div class="timestamp" id="timestamp_{{ each_camera.uuid }}"></div>
         <div class="camera_still"><img id="camera_frame_{{ each_camera.id }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
