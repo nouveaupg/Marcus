@@ -31,7 +31,7 @@
                   response_data = JSON.parse(data);
                   if (response_data['success'] == true) {
                     $("#camera_frame_{{ each_camera.uuid }}").attr('src',"http://6846cedarcove.webcam/uploaded_images/" + response_data['frame_url']);
-                    d = Date(response_data['frame_timestamp']);
+                    d = new Date(response_data['frame_timestamp']);
                     $("#timestamp_{{ each_camera.uuid }}").text(d.toLocaleString());
                   }
                   else {
@@ -58,8 +58,8 @@
           <button style="vertical-align:top" id="previous_timeslide_{{ each_camera.uuid }}">Previous Frame</button>&nbsp;
           <button style="vertical-align:top" id="next_timeslide_{{ each_camera.uuid }}">Next Frame</button>&nbsp;
           <button style="vertical-align:top" class="refresh">Refresh</button>
-          <input type="checkbox" class="auto_refresh">Auto-refresh every</input>
-          <input type="text" size="2" value="5"></input><span style="margin-left:7px">seconds.</span>
+          <input id="checkbox_{{ each_camera.uuid }}" type="checkbox" class="auto_refresh">Auto-refresh every</input>
+          <input id="interval_{{ each_camera.uuid }}" type="text" size="2" value="5"></input><span style="margin-left:7px">seconds.</span>
         </div>
         <div class="timestamp" id="timestamp_{{ each_camera.uuid }}"></div>
         <div class="camera_still"><img id="camera_frame_{{ each_camera.uuid }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>

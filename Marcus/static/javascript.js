@@ -11,7 +11,7 @@ function refreshDataAjax() {
         widget.slider("option","max",camera_data[each]["frames"]-1);
         widget.slider("value",camera_data[each]["frames"]-1);
         $(timeslider_id + " span").css("left","100%");
-        d = Date(camera_data[each]['latest_frame_timestamp']);
+        d = new Date(camera_data[each]['latest_frame_timestamp']);
         console.log(d);
         $("#timestamp_" + each).text(d.toLocaleString());
       }
