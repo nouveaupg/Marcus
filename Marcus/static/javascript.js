@@ -29,9 +29,9 @@ function getFrameInfo(camera_uuid,frame_offset) {
   $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
     response_data = JSON.parse(data);
     if (response_data['success'] == true) {
-      $("#camera_frame_{{ each_camera.id }}").attr('src',"uploaded_images/" + response_data['frame_url']);
+      $("#camera_frame_" + camera_uuid).attr('src',"uploaded_images/" + response_data['frame_url']);
       d = Date(response_data['frame_timestamp']);
-      $("#timestamp_{{ each_camera.uuid }}").text(d.toLocaleString());
+      $("#timestamp_" + camera_uuid).text(d.toLocaleString());
     }
     else {
       alert("Error updating camera(s)!");

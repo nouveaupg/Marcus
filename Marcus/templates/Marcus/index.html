@@ -16,6 +16,10 @@
           $("#remove_camera").toggle();
         });
 
+        $(".refresh").click(function(){
+          refreshDataAjax();
+        })
+
         {% if camera_list %}
           {% for each_camera in camera_list %}
             $("#timeslider_{{ each_camera.uuid }}").slider({change:
@@ -26,7 +30,7 @@
                 $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
                   response_data = JSON.parse(data);
                   if (response_data['success'] == true) {
-                    $("#camera_frame_{{ each_camera.id }}").attr('src',"http://6846cedarcove.webcam/uploaded_images/" + response_data['frame_url']);
+                    $("#camera_frame_{{ each_camera.uuid }}").attr('src',"http://6846cedarcove.webcam/uploaded_images/" + response_data['frame_url']);
                     d = Date(response_data['frame_timestamp']);
                     $("#timestamp_{{ each_camera.uuid }}").text(d.toLocaleString());
                   }
@@ -58,7 +62,7 @@
           <input type="text" size="2" value="5"></input><span style="margin-left:7px">seconds.</span>
         </div>
         <div class="timestamp" id="timestamp_{{ each_camera.uuid }}"></div>
-        <div class="camera_still"><img id="camera_frame_{{ each_camera.id }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
+        <div class="camera_still"><img id="camera_frame_{{ each_camera.uuid }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
         <div class="camera_uuid_display"><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
         <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div>
     </div>
