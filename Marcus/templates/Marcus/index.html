@@ -6,6 +6,7 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static "stylesheet.css" %}" />
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/JavaScript" src="{% static "javascript.js" %}"></script>
     <script type="text/JavaScript">
     $(document).ready(function() {
         $("#add_camera_link").click(function() {
@@ -26,7 +27,8 @@
                   response_data = JSON.parse(data);
                   if (response_data['success'] == true) {
                     $("#camera_frame_{{ each_camera.id }}").attr('src',"http://6846cedarcove.webcam/uploaded_images/" + response_data['frame_url']);
-                    $("#timestamp_{{ each_camera.uuid }}").text(response_data['frame_timestamp']);
+                    d = Date(response_data['frame_timestamp']);
+                    $("#timestamp_{{ each_camera.uuid }}").text(d.toLocaleString());
                   }
                   else {
                     alert("Error updating camera(s)!");
@@ -36,25 +38,7 @@
           {% endfor %}
         {% endif %}
 
-        var data_dump = JSON.stringify({"action":"getCameraData"});
-	      $.post("json-api/",data_dump,function(data,textStatus,jqXHR){
-          response_data = JSON.parse(data);
-          if (response_data['success'] == true) {
-            var camera_data = response_data["cameras"];
-            for( each in camera_data ) {
-              var timeslider_id = "#timeslider_" + each;
-              var widget = $(timeslider_id);
-              widget.slider("option","min",0);
-              widget.slider("option","max",camera_data[each]["frames"]-1);
-              widget.slider("value",camera_data[each]["frames"]-1);
-              $(timeslider_id + " span").css("left","100%");
-              $("#timestamp_" + each).text(camera_data[each]['latest_frame_timestamp']);
-            }
-          }
-          else {
-            alert("Error updating camera(s)!");
-          }
-        });
+        refreshDataAjax();
     });
     </script>
   </head>
@@ -63,10 +47,19 @@
     <ul>
     {% for each_camera in camera_list %}
       <li><h2>{{ each_camera.name }}</h2>
-      <div class="camera_timeslider" id="timeslider_{{ each_camera.uuid }}"></div><div class="timestamp" id="timestamp_{{ each_camera.uuid }}"></div>
-      <div class="camera_still"><img id="camera_frame_{{ each_camera.id }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
-      <div class="camera_uuid_display"><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
-      <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div>
+      <div id="container_{{each_camera.uuid}}">
+
+        <div class="control" style="width:630px;margin-bottom:10px;margin-right:10px" id="timeslider_{{ each_camera.uuid }}"></div>
+        <div class="buttons">
+          <button style="vertical-align:top" id="previous_timeslide_{{ each_camera.uuid }}">Previous Frame</button>&nbsp;
+          <button style="vertical-align:top" id="next_timeslide_{{ each_camera.uuid }}">Next Frame</button>&nbsp;
+          <button style="vertical-align:top" class="refresh">Refresh</button>
+        </div>
+        <div class="timestamp" id="timestamp_{{ each_camera.uuid }}"></div>
+        <div class="camera_still"><img id="camera_frame_{{ each_camera.id }}" width="640" height="480" src="/camera/{{ each_camera.id }}/latest_still.jpg" /></div>
+        <div class="camera_uuid_display"><strong>UUID</strong>&nbsp;{{ each_camera.uuid }}</div>
+        <div><strong>IP Address</strong>&nbsp;{{ each_camera.ip_addr }}</div>
+    </div>
     </li>
     {% endfor %}
     </ul>

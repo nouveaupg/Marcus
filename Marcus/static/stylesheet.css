@@ -6,6 +6,9 @@
 li {list-style-type: none;}
 .camera_timeslider {width: 480px;
 margin: 30px;}
+.buttons {
+  margin-bottom: 20px;
+}
 .camera_uuid_display {
   margin-top:30px;
 }
