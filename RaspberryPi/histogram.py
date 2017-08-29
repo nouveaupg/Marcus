@@ -54,6 +54,10 @@ def generate_histogram(image,save_histogram=False):
         graph.save("histogram.png","PNG")
         print "Saved histogram."
     return {"max":max_value,"histogram":output,"mean":average,"variance":variance}
+
+def histogram_from_file(fp):
+    image = Image.open(fp)
+    return generate_histogram(image)
     
 if __name__ == '__main__':
     if len(sys.argv) > 1:
