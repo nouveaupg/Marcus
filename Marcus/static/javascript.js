@@ -30,11 +30,11 @@ function getFrameInfo(camera_uuid,frame_offset) {
     response_data = JSON.parse(data);
     if (response_data['success'] == true) {
       $("#camera_frame_" + camera_uuid).attr('src',"uploaded_images/" + response_data['frame_url']);
-      d = Date(response_data['frame_timestamp']);
+      d = new Date(response_data['frame_timestamp']);
       $("#timestamp_" + camera_uuid).text(d.toLocaleString());
     }
     else {
-      alert("Error updating camera(s)!");
+      alert("Error retrieving frame.");
     }
   });
 }
